@@ -344,9 +344,11 @@ function M.open(state, mode)
   elseif mode == 'o' then
     -- open line below
     vim.cmd('normal! o')
+    vim.cmd('startinsert')
   elseif mode == 'O' then
     -- open line above
     vim.cmd('normal! O')
+    vim.cmd('startinsert')
   end
   -- mode == nil: stay in normal mode at cursor position
 end
