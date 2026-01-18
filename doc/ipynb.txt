@@ -28,7 +28,7 @@ Features:
 - Cell folding to collapse cell content
 - Tree-sitter based syntax highlighting
 
-Open any .ipynb file and use `i` to edit cells, `]]`/`[[` to navigate.
+Open any .ipynb file and use `i` to enter Cell mode, `]]`/`[[` to navigate.
 
 ==============================================================================
 SETUP                                                             *ipynb-setup*
@@ -85,7 +85,7 @@ Configuration is passed to |ipynb.setup()|. All fields are optional.
 NotebookConfig                                                  *NotebookConfig*
 
     Fields: ~
-        {float}           (FloatConfig)          Edit float window settings
+        {float}           (FloatConfig)          Cell float window settings
         {keymaps}         (KeymapConfig)         Key bindings
         {highlights}      (HighlightConfig)      Cell colors
         {border_hints}    (BorderHintsConfig)    Action hints on cell borders
@@ -110,84 +110,84 @@ FloatConfig                                                        *FloatConfig*
 KeymapConfig                                                      *KeymapConfig*
 
     All keymaps can be customized or disabled (set to false).
-    Direct keys (i, a, o, O, <CR>, dd, p, P) are hardcoded for edit mode
+    Direct keys (i, a, o, O, <CR>, dd, p, P) are hardcoded for Cell mode
     entry and cell operations.
 
     Where keymaps apply:
-    - [F] = Facade buffer only
-    - [E] = Edit float only
-    - [F+E] = Both facade and edit float
+    - [N] = Notebook mode only
+    - [C] = Cell mode only
+    - [N+C] = Both Notebook mode and Cell mode
 
-    Direct keys (facade only): ~
-        {next_cell}            (string)  [F] Jump to next cell
+    Direct keys (Notebook mode only): ~
+        {next_cell}            (string)  [N] Jump to next cell
                                          Default: ']]'
-        {prev_cell}            (string)  [F] Jump to previous cell
+        {prev_cell}            (string)  [N] Jump to previous cell
                                          Default: '[['
-        {cut_cell}             (string)  [F] Cut cell to register
+        {cut_cell}             (string)  [N] Cut cell to register
                                          Default: 'dd'
-        {paste_cell_below}     (string)  [F] Paste cell below
+        {paste_cell_below}     (string)  [N] Paste cell below
                                          Default: 'p'
-        {paste_cell_above}     (string)  [F] Paste cell above
+        {paste_cell_above}     (string)  [N] Paste cell above
                                          Default: 'P'
-        {move_cell_down}       (string)  [F] Move cell down
+        {move_cell_down}       (string)  [N] Move cell down
                                          Default: '<M-j>'
-        {move_cell_up}         (string)  [F] Move cell up
+        {move_cell_up}         (string)  [N] Move cell up
                                          Default: '<M-k>'
-        {execute_and_insert}   (string)  [F] Execute cell, insert below
+        {execute_and_insert}   (string)  [N] Execute cell, insert below
                                          Default: '<M-CR>'
-        {interrupt_kernel}     (string)  [F] Interrupt kernel
+        {interrupt_kernel}     (string)  [N] Interrupt kernel
                                          Default: '<C-c>'
 
     Direct keys (both): ~
-        {execute_cell}         (string)  [F+E] Execute cell, stay
+        {execute_cell}         (string)  [N+C] Execute cell, stay
                                          Default: '<C-CR>'
-        {execute_and_next}     (string)  [F+E] Execute cell, move next
+        {execute_and_next}     (string)  [N+C] Execute cell, move next
                                          Default: '<S-CR>'
 
-    <leader>k menu (both facade and edit): ~
-        {add_cell_above}       (string)  [F+E] Add cell above
+    <leader>k menu (both Notebook mode and Cell mode): ~
+        {add_cell_above}       (string)  [N+C] Add cell above
                                          Default: '<leader>ka'
-        {add_cell_below}       (string)  [F+E] Add cell below
+        {add_cell_below}       (string)  [N+C] Add cell below
                                          Default: '<leader>kb'
-        {make_markdown}        (string)  [F+E] Make cell markdown
+        {make_markdown}        (string)  [N+C] Make cell markdown
                                          Default: '<leader>km'
-        {make_code}            (string)  [F+E] Make cell code
+        {make_code}            (string)  [N+C] Make cell code
                                          Default: '<leader>ky'
-        {make_raw}             (string)  [F+E] Make cell raw
+        {make_raw}             (string)  [N+C] Make cell raw
                                          Default: '<leader>kr'
-        {open_output}          (string)  [F+E] Open output in float
+        {open_output}          (string)  [N+C] Open output in float
                                          Default: '<leader>ko'
-        {clear_output}         (string)  [F+E] Clear cell output
+        {clear_output}         (string)  [N+C] Clear cell output
                                          Default: '<leader>kc'
-        {clear_all_outputs}    (string)  [F+E] Clear all outputs
+        {clear_all_outputs}    (string)  [N+C] Clear all outputs
                                          Default: '<leader>kC'
-        {menu_execute_cell}    (string)  [F+E] Execute cell (menu)
+        {menu_execute_cell}    (string)  [N+C] Execute cell (menu)
                                          Default: '<leader>kx'
-        {menu_execute_and_next}(string)  [F+E] Execute + next (menu)
+        {menu_execute_and_next}(string)  [N+C] Execute + next (menu)
                                          Default: '<leader>kX'
-        {execute_all_below}    (string)  [F+E] Execute all below
+        {execute_all_below}    (string)  [N+C] Execute all below
                                          Default: nil (unmapped)
-        {kernel_interrupt}     (string)  [F+E] Interrupt kernel
+        {kernel_interrupt}     (string)  [N+C] Interrupt kernel
                                          Default: '<leader>ki'
-        {kernel_restart}       (string)  [F+E] Restart kernel
+        {kernel_restart}       (string)  [N+C] Restart kernel
                                          Default: '<leader>k0'
-        {kernel_start}         (string)  [F+E] Start kernel
+        {kernel_start}         (string)  [N+C] Start kernel
                                          Default: '<leader>ks'
-        {kernel_shutdown}      (string)  [F+E] Shutdown kernel
+        {kernel_shutdown}      (string)  [N+C] Shutdown kernel
                                          Default: '<leader>kS'
-        {kernel_info}          (string)  [F+E] Show kernel info
+        {kernel_info}          (string)  [N+C] Show kernel info
                                          Default: '<leader>kn'
-        {jump_to_cell}         (string)  [F+E] Open cell picker
+        {jump_to_cell}         (string)  [N+C] Open cell picker
                                          Default: '<leader>kj'
-        {fold_toggle}          (string)  [F] Toggle cell fold
+        {fold_toggle}          (string)  [N] Toggle cell fold
                                          Default: '<leader>kf'
 
-    Inspector (both facade and edit): ~
-        {variable_inspect}     (string)  [F+E] Inspect variable at cursor
+    Inspector (both notebook and cell mode): ~
+        {variable_inspect}     (string)  [N+C] Inspect variable at cursor
                                          Default: '<leader>kh'
-        {cell_variables}       (string)  [F+E] Inspect all cell variables
+        {cell_variables}       (string)  [N+C] Inspect all cell variables
                                          Default: '<leader>kv'
-        {toggle_auto_hover}    (string)  [F+E] Toggle inspect auto-hover
+        {toggle_auto_hover}    (string)  [N+C] Toggle inspect auto-hover
                                          Default: '<leader>kH'
 
 ------------------------------------------------------------------------------
@@ -209,7 +209,7 @@ HighlightConfig                                                *HighlightConfig*
                                    Default: 'Comment'
         {border_hover}   (string)  Border when cursor is on cell
                                    Default: 'Special'
-        {border_active}  (string)  Border when editing in float
+        {border_active}  (string)  Border when in Cell mode
                                    Default: 'Number'
         {exec_count}     (string)  Execution count [N]
                                    Default: 'Number'
@@ -309,80 +309,78 @@ BorderHintsConfig                                            *BorderHintsConfig*
                                    Default: true
         {show_on_hover} (boolean)  Show hints when cursor is on cell
                                    Default: true
-        {show_on_edit}  (boolean)  Show hints when editing in float
+        {show_on_edit}  (boolean)  Show hints when in Cell mode
                                    Default: true
 
 ==============================================================================
 KEYMAPS                                                         *ipynb-keymaps*
 
 Keymaps are organized by where they apply:
-- [F] = Facade buffer only (navigation mode)
-- [E] = Edit float only
-- [F+E] = Both facade and edit float
+- [N] = Notebook mode only
+- [C] = Cell mode only
+- [N+C] = Both Notebook mode and Cell mode
 
-Facade-only (entering edit mode, cell operations): ~
+Notebook mode only (entering Cell mode, cell operations): ~
 
-    These work only in the facade buffer.
+    These work only in Notebook mode.
 
-    `<CR>`       [F]   Edit cell (normal mode)
-    `i`          [F]   Edit cell (insert mode)
-    `a`          [F]   Edit cell (append)
-    `I`          [F]   Edit cell (insert at line start)
-    `A`          [F]   Edit cell (append at line end)
-    `o`          [F]   Edit cell (open line below)
-    `O`          [F]   Edit cell (open line above)
-    `dd`         [F]   Cut cell
-    `p`          [F]   Paste cell below
-    `P`          [F]   Paste cell above
-    `]]`         [F]   Jump to next cell
-    `[[`         [F]   Jump to previous cell
-    `<M-j>`      [F]   Move cell down
-    `<M-k>`      [F]   Move cell up
-    `<M-CR>`     [F]   Execute cell, insert below
-    `<C-c>`      [F]   Interrupt kernel
+    `<CR>`       [N]   Enter cell in Normal mode
+    `i`          [N]   Enter cell in Insert mode (insert)
+    `a`          [N]   Enter cell in Insert mode (append)
+    `I`          [N]   Enter cell in Insert mode (insert at line start)
+    `A`          [N]   Enter cell in Insert mode (append at line end)
+    `o`          [N]   Enter cell in Insert mode (open line below)
+    `O`          [N]   Enter cell in Insert mode (open line above)
+    `dd`         [N]   Cut cell
+    `p`          [N]   Paste cell below
+    `P`          [N]   Paste cell above
+    `]]`         [N]   Jump to next cell
+    `[[`         [N]   Jump to previous cell
+    `<M-j>`      [N]   Move cell down
+    `<M-k>`      [N]   Move cell up
+    `<M-CR>`     [N]   Execute cell, insert below
+    `<C-c>`      [N]   Interrupt kernel
 
-Edit-only (float navigation): ~
+Cell mode only: ~
 
-    These work only in the edit float.
+    `<Esc>`      [C]   Exit cell, return to Notebook mode
+    `<C-j>`      [C]   Enter next cell
+    `<C-k>`      [C]   Enter previous cell
 
-    `<Esc>`      [E]   Close float, return to facade
-    `<C-j>`      [E]   Edit next cell
-    `<C-k>`      [E]   Edit previous cell
-
-Both facade and edit float: ~
+Both Notebook mode and Cell mode: ~
 
     These work in both contexts.
 
-    `<S-CR>`     [F+E] Execute cell, move next
-    `<C-CR>`     [F+E] Execute cell, stay
-    `u`          [F+E] Undo (global)
-    `<C-r>`      [F+E] Redo (global)
+    `<S-CR>`     [N+C] Execute cell, move next
+    `<C-CR>`     [N+C] Execute cell, stay
+    `u`          [N+C] Undo (global)
+    `<C-r>`      [N+C] Redo (global)
 
-<leader>k menu (works in both facade and edit float): ~
+<leader>k menu (works in both Notebook mode and Cell mode): ~
 
-    `<leader>ka` [F+E] Add cell above
-    `<leader>kb` [F+E] Add cell below
-    `<leader>km` [F+E] Make markdown
-    `<leader>ky` [F+E] Make code
-    `<leader>kr` [F+E] Make raw
-    `<leader>ko` [F+E] Open output in float
-    `<leader>kc` [F+E] Clear cell output
-    `<leader>kC` [F+E] Clear all outputs
-    `<leader>kx` [F+E] Execute cell
-    `<leader>kX` [F+E] Execute cell, move next
-    `<leader>ki` [F+E] Interrupt kernel
-    `<leader>k0` [F+E] Restart kernel
-    `<leader>ks` [F+E] Start kernel
-    `<leader>kS` [F+E] Shutdown kernel
-    `<leader>kn` [F+E] Kernel info
-    `<leader>kj` [F+E] Jump to cell (picker)
-    `<leader>kf` [F]   Toggle cell fold (facade only)
+    `<leader>ka` [N+C] Add cell above
+    `<leader>kb` [N+C] Add cell below
+    `<leader>km` [N+C] Make markdown
+    `<leader>ky` [N+C] Make code
+    `<leader>kr` [N+C] Make raw
+    `<leader>ko` [N+C] Open output in float
+    `<leader>kc` [N+C] Clear cell output
+    `<leader>kC` [N+C] Clear all outputs
+    `<leader>kx` [N+C] Execute cell
+    `<leader>kX` [N+C] Execute cell, move next
+    `<leader>ki` [N+C] Interrupt kernel
+    `<leader>k0` [N+C] Restart kernel
+    `<leader>ks` [N+C] Start kernel
+    `<leader>kS` [N+C] Shutdown kernel
+    `<leader>kn` [N+C] Kernel info
+    `<leader>kj` [N+C] Jump to cell (picker)
+    `<leader>kf` [N]   Toggle cell fold (Notebook mode only)
 
-Inspector (works in both facade and edit float): ~
+Inspector (works in both Notebook mode and Cell mode): ~
 
-    `<leader>kh` [F+E] Inspect variable
-    `<leader>kv` [F+E] Inspect cell
-    `<leader>kH` [F+E] Toggle inspect auto-hover
+    `<leader>kh` [N+C] Inspect variable
+    `<leader>kv` [N+C] Inspect cell
+    `<leader>kH` [N+C] Toggle inspect auto-hover
 
 LSP: ~
 
@@ -392,7 +390,7 @@ LSP: ~
 
     Supported LSP features:
     - Diagnostics (errors, warnings inline)
-    - Completion (triggered with `<C-Space>` in edit float)
+    - Completion (triggered with `<C-Space>` in Cell mode)
     - Hover (`K`)
     - Go to definition (`gd`)
     - Go to references (`gr`)
@@ -459,7 +457,7 @@ Formatting: ~
     `:NotebookFormatAll`           Format all code cells (processes bottom-to-top)
 
     Note: `vim.lsp.buf.format()` is wrapped to work with notebooks automatically.
-    On the facade buffer it formats all cells; in the edit float it formats
+    In Notebook mode it formats all cells; in Cell mode it formats
     the current cell. This means your existing format keybindings (e.g.,
     `<leader>f`) will work seamlessly with notebooks.
 

@@ -21,11 +21,10 @@ A modal Jupyter notebook editor for Neovim.
 
 The plugin uses a modal editing approach:
 
-- **Facade buffer**: A read-only view of your notebook for navigation between cells
-- **Cell buffers**: When you edit a cell, changes happen in an isolated buffer that overlays the cell
-- **Shadow buffer**: A hidden buffer containing only code cells, used for LSP communication
+- **Notebook mode**: for navigating and managing cells
+- **Cell mode**: for editing cell content in an isolated buffer
 
-This architecture attempts to strike a balance between isolated cells and a natural Vim editing experience.
+Under the hood, the notebook is rendered into a single buffer for display. Entering Cell mode opens an isolated buffer for just the active cell, and edits sync back to the notebook buffer. In parallel, all code cells are mirrored into a shared “shadow” buffer that LSP requests are proxied through. This design aims to preserve the feel of Jupyter notebooks.
 
 ## ⚡️ Requirements
 
@@ -76,17 +75,17 @@ The treesitter parser is automatically compiled on first load.
   ```
 
   ```vim
-  -- or from in neovim:
+  " or from in neovim:
   :e notebook.ipynb
-  -- or
+  " or
   :NotebookCreate notebook.ipynb 
   ```
 
 ### 2. Edit a cell
 
 - Place your cursor anywhere on a cell (you can quickly navigate using `]]` (next) and `[[` (previous), though any vim motions will work)
-- Press `i` (INSERT) or `<CR>` (NORMAL) to enter edit mode for the current cell
-- Press `<Esc>` to exit edit mode and return to navigation mode
+- Press `i` (Insert) or `<CR>` (Normal) to enter Cell mode for the current cell
+- Press `<Esc>` to exit Cell mode and return to Notebook mode
 
 ### 3. Start a kernel
 
@@ -174,49 +173,49 @@ This updates the notebook metadata and re-attaches the appropriate LSP.
 ```lua
 require("ipynb").setup({
   keymaps = {
-    -- Navigation (facade buffer)
+    -- Navigation (Notebook mode)
     next_cell = "]]",              -- jump to next cell
     prev_cell = "[[",              -- jump to previous cell
-    -- Navigation (facade and edit buffers)
+    -- Navigation (both Notebook mode and Cell mode)
     jump_to_cell = "<leader>kj",   -- open cell picker
-    -- Cell operations (facade buffer)
+    -- Cell operations (Notebook mode)
     cut_cell = "dd",               -- cut cell to register
     paste_cell_below = "p",        -- paste cell below
     paste_cell_above = "P",        -- paste cell above
     move_cell_down = "<M-j>",      -- move cell down
     move_cell_up = "<M-k>",        -- move cell up
-    -- Cell operations (facade and edit buffers)
+    -- Cell operations (both Notebook mode and Cell mode)
     add_cell_above = "<leader>ka", -- insert cell above
     add_cell_below = "<leader>kb", -- insert cell below
     make_markdown = "<leader>km",  -- convert to markdown cell
     make_code = "<leader>ky",      -- convert to code cell
     make_raw = "<leader>kr",       -- convert to raw cell
     fold_toggle = "<leader>kf",    -- toggle cell fold
-    -- Execution (facade and edit buffers)
+    -- Execution (both Notebook mode and Cell mode)
     execute_cell = "<C-CR>",            -- execute cell, stay
     execute_and_next = "<S-CR>",        -- execute cell, move to next
     execute_and_insert = "<M-CR>",      -- execute cell, insert new below
     execute_all_below = nil,            -- execute current and all below (unmapped)
     menu_execute_cell = "<leader>kx",   -- execute cell (menu, if <C-CR> conflicts)
     menu_execute_and_next = "<leader>kX", -- execute and next (menu, if <S-CR> conflicts)
-    -- Output (facade and edit buffers)
+    -- Output (both Notebook mode and Cell mode)
     open_output = "<leader>ko",      -- open cell output in float (for copying)
     clear_output = "<leader>kc",     -- clear current cell output
     clear_all_outputs = "<leader>kC", -- clear all outputs
-    -- Kernel (facade and edit buffers)
+    -- Kernel (both Notebook mode and Cell mode)
     interrupt_kernel = "<C-c>",      -- interrupt execution
     kernel_interrupt = "<leader>ki", -- interrupt (menu)
     kernel_restart = "<leader>k0",   -- restart kernel
     kernel_start = "<leader>ks",     -- start kernel
     kernel_shutdown = "<leader>kS",  -- shutdown kernel
     kernel_info = "<leader>kn",      -- show kernel info
-    -- Inspector (facade and edit buffers)
+    -- Inspector (both Notebook mode and Cell mode)
     variable_inspect = "<leader>kh", -- inspect variable at cursor
     cell_variables = "<leader>kv",   -- show all variables in cell
     toggle_auto_hover = "<leader>kH", -- toggle auto-hover on CursorHold
-    -- Note: i, a, I, A, o, O, <CR> enter edit mode; <Esc> exits
-    -- Note: u, <C-r> perform global undo/redo across cells in both navigation and edit modes
-    -- Note: <C-j>/<C-k> navigate cells while editing
+    -- Note: i, a, I, A, o, O, <CR> enter Cell mode; <Esc> exits Cell mode
+    -- Note: u, <C-r> perform global undo/redo across cells in both Notebook mode and Cell mode
+    -- Note: <C-j>/<C-k> navigate cells while in Cell mode
     -- Note: LSP commands (go to definition, references, hover, etc.) are proxied
   },
   -- Highlight groups for various notebook elements
@@ -224,7 +223,7 @@ require("ipynb").setup({
     -- For notebook
     border = "Comment",           -- Cell border
     border_hover = "Special",     -- Cell border when cursor on cell
-    border_active = "Number",     -- Cell border when editing
+    border_active = "Number",     -- Cell border when in Cell mode
     exec_count = "Number",        -- Execution count [N]
     output = "Comment",           -- Output text
     hint = "Comment",             -- Cell action keymap hints
@@ -236,8 +235,8 @@ require("ipynb").setup({
   -- Cell border action keymap hints
   border_hints = {
     enabled = true,        -- Show action hints on active cell border
-    show_on_hover = true,  -- Show hints in navigation mode
-    show_on_edit = true,   -- Show hints in edit mode
+    show_on_hover = true,  -- Show hints in Notebook mode
+    show_on_edit = true,   -- Show hints in Cell mode
   },
   kernel = {
     auto_connect = false,  -- Auto-connect to kernel on notebook open
