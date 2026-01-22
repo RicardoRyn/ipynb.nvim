@@ -387,7 +387,7 @@ Requires snacks.nvim and a terminal which fully supports the kitty graphics prot
 - [x] Kernel execution and output capture
 - [x] Inline image rendering
 - [x] Variable inspector (Jupyter inspect protocol, auto-hover)
-- [x] Partial LSP support (diagnostics, completion, hover, definition, references, rename, formatting)
+- [x] Partial LSP support (diagnostics, completion, hover, definition, references, rename, formatting, document symbols, signature help)
 - [x] Multi-language support (Python, Julia, R, etc.)
 - [x] Cell folding
 - [x] Cell formatting via LSP (`:NotebookFormatCell`, `:NotebookFormatAll`, or `vim.lsp.buf.format()`)
@@ -395,11 +395,9 @@ Requires snacks.nvim and a terminal which fully supports the kitty graphics prot
 
 🕒 **Not Yet Implemented:**
 
-- Document symbols (`textDocument/documentSymbol`) - outline/symbol pickers
-- Signature help (`textDocument/signatureHelp`) - function signature hints
 - Document highlight (`textDocument/documentHighlight`) - highlight symbol references
 - Inlay hints (`textDocument/inlayHint`) - inline type hints
 
 🚫 **Not Supported:**
 
-- Code actions (`textDocument/codeAction`) - code actions can modify arbitrary ranges potentially spanning cell boundaries, making them unsafe for notebooks
+- Code actions (`textDocument/codeAction`) - code actions can modify arbitrary ranges potentially spanning cell boundaries, making them tricky to implement in this notebook architecture

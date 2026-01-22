@@ -17,6 +17,7 @@ local NAVIGATION_METHODS = {
   ['textDocument/declaration'] = true,
   ['textDocument/implementation'] = true,
   ['textDocument/typeDefinition'] = true,
+  ['textDocument/documentSymbol'] = true,
 }
 
 ---Create a custom URI for a notebook facade
@@ -128,6 +129,12 @@ function M.rewrite_result_uris(result, state, method)
     end
     if obj.targetUri == shadow_uri then
       obj.targetUri = facade_uri
+    end
+
+    -- For documentSymbol: inject uri into objects that have range but no uri
+    -- Hierarchical DocumentSymbol responses don't include uri fields
+    if method == 'textDocument/documentSymbol' and obj.range and not obj.uri then
+      obj.uri = facade_uri
     end
 
     -- Recurse into nested tables/arrays

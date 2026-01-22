@@ -893,8 +893,6 @@ LSP code actions (`textDocument/codeAction`) are intentionally not supported bec
 
 The following LSP features could be added in the future:
 
-- `textDocument/documentSymbol` - document outline (used by symbol pickers)
-- `textDocument/signatureHelp` - function signature hints while typing
 - `textDocument/documentHighlight` - highlight other references of symbol under cursor
 - `textDocument/inlayHint` - inline type hints (Neovim 0.10+)
 
