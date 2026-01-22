@@ -387,16 +387,20 @@ Requires snacks.nvim and a terminal which fully supports the kitty graphics prot
 - [x] Kernel execution and output capture
 - [x] Inline image rendering
 - [x] Variable inspector (Jupyter inspect protocol, auto-hover)
-- [x] Partial LSP support (diagnostics, completion, hover, definition, references, rename, formatting, document symbols, signature help)
+- [x] Partial LSP support (diagnostics, completion, hover, definition, references, rename, formatting, document symbols, signature help, document highlight, inlay hints)
 - [x] Multi-language support (Python, Julia, R, etc.)
 - [x] Cell folding
 - [x] Cell formatting via LSP (`:NotebookFormatCell`, `:NotebookFormatAll`, or `vim.lsp.buf.format()`)
 - [x] Health check (`:checkhealth ipynb`)
 
-🕒 **Not Yet Implemented:**
+🚧 **Not Tested (may or may not work):**
 
-- Document highlight (`textDocument/documentHighlight`) - highlight symbol references
-- Inlay hints (`textDocument/inlayHint`) - inline type hints
+- Semantic tokens (`textDocument/semanticTokens`)
+- Code lens (`textDocument/codeLens`)
+- Document links (`textDocument/documentLink`)
+- Call hierarchy (`callHierarchy/*`)
+- Type hierarchy (`typeHierarchy/*`)
+- Selection range (`textDocument/selectionRange`)
 
 🚫 **Not Supported:**
 

@@ -889,12 +889,14 @@ LSP code actions (`textDocument/codeAction`) are intentionally not supported bec
 - The complexity of safely handling cross-cell modifications is high
 - Users can still run code actions manually in the shadow buffer if needed
 
-**Not Yet Implemented:**
+**Not Tested (may or may not work):**
 
-The following LSP features could be added in the future:
-
-- `textDocument/documentHighlight` - highlight other references of symbol under cursor
-- `textDocument/inlayHint` - inline type hints (Neovim 0.10+)
+- `textDocument/semanticTokens`
+- `textDocument/codeLens`
+- `textDocument/documentLink`
+- `callHierarchy/*`
+- `typeHierarchy/*`
+- `textDocument/selectionRange`
 
 These would follow the same proxy pattern: intercept request, redirect to shadow buffer, rewrite results.
 

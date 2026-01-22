@@ -88,12 +88,17 @@ local function wrap_client(client, shadow_buf)
       -- Rewrite params to point to shadow buffer
       params = util.rewrite_params(params, state, ctx.is_edit_buf, ctx.line_offset)
 
-      -- Wrap handler to rewrite URIs in results back to facade
-      if handler then
-        local orig_handler = handler
-        handler = function(err, result, ...)
+      -- Wrap handler to rewrite URIs and context bufnr back to facade
+      -- When handler is nil, vim.lsp uses the global handler - we need to wrap that too
+      local orig_handler = handler or vim.lsp.handlers[method]
+      if orig_handler then
+        handler = function(err, result, hctx, config)
           result = uri_mod.rewrite_result_uris(result, state, method)
-          return orig_handler(err, result, ...)
+          if hctx then
+            hctx = vim.deepcopy(hctx)
+            hctx.bufnr = state.facade_buf
+          end
+          return orig_handler(err, result, hctx, config)
         end
       end
 
@@ -196,9 +201,10 @@ function M.install()
     if state and state.shadow_buf and vim.api.nvim_buf_is_valid(state.shadow_buf) then
       params = util.rewrite_params(params, state, ctx.is_edit_buf, ctx.line_offset)
 
-      -- Wrap handler to rewrite URIs back (no line translation - positions are absolute)
-      local orig_handler = handler
-      if handler then
+      -- Wrap handler to rewrite URIs and context bufnr back to facade
+      -- When handler is nil, vim.lsp uses the global handler - we need to wrap that too
+      local orig_handler = handler or vim.lsp.handlers[method]
+      if orig_handler then
         handler = function(err, result, hctx, config)
           result = uri_mod.rewrite_result_uris(result, state, method)
           if hctx then
@@ -226,9 +232,10 @@ function M.install()
     if state and state.shadow_buf and vim.api.nvim_buf_is_valid(state.shadow_buf) then
       params = util.rewrite_params(params, state, ctx.is_edit_buf, ctx.line_offset)
 
-      -- Wrap handler to rewrite URIs back
-      local orig_handler = handler
-      if handler then
+      -- Wrap handler to rewrite URIs and context bufnr back to facade
+      -- When handler is nil, vim.lsp uses the global handler - we need to wrap that too
+      local orig_handler = handler or vim.lsp.handlers[method]
+      if orig_handler then
         handler = function(results, hctx, config)
           for _, resp in pairs(results) do
             if resp.result then
