@@ -11,6 +11,8 @@ A modal Jupyter notebook editor for Neovim with partial LSP support.
 3. **Shadow buffer for LSP** - Hidden buffer with code cells only (markdown → blank lines), LSP attaches here
 4. **Line-synchronized** - Shadow and facade have identical line counts (1:1 position mapping)
 5. **Lazy edit buffers** - Cell content loaded into float on demand
+6. **Facade-aware navigation** - `nb://` URIs are used for picker previews and are immediately redirected back to the facade when opened in normal windows
+7. **LSP keymaps on facade** - `LspAttach` is emitted for the facade buffer so user keymaps appear on the notebook view
 
 ---
 
@@ -74,6 +76,12 @@ A modal Jupyter notebook editor for Neovim with partial LSP support.
 
 **Key insight:** Shadow buffer maintains 1:1 line mapping with facade. Line N in facade = Line N in shadow.
 This eliminates position translation complexity - LSP positions work directly.
+
+### Notes on LSP UX
+
+- **nb:// URI scheme**: LSP results are rewritten to `nb://` for picker previews so users see the facade view instead of raw JSON. If a picker tries to open an `nb://` buffer in a normal window, it is redirected to the actual facade buffer.
+- **Facade LspAttach**: The facade buffer fires `LspAttach` so user LSP keymaps (gd/gr/K/etc.) are available on the notebook view even though the LSP client is attached to the shadow buffer.
+- **Shadow location**: Shadow buffers can live in temp or under the workspace (opt-in) to satisfy servers that require project layout. See `config.lua` for `shadow.location` and `shadow.dir`.
 
 ---
 

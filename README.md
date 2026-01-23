@@ -271,6 +271,11 @@ require("ipynb").setup({
     -- This option control how many blank lines to keep:
     trailing_blank_lines = 0,  -- # trailing blank lines to keep per cell when formatted
   },
+  -- Shadow buffer location (use "workspace" if LSP needs project/module layout)
+  shadow = {
+    location = "temp",   -- "temp" (default) or "workspace"
+    dir = ".ipynb.nvim", -- subdir used when location = "workspace" (opt-in)
+  },
 })
 ```
 <!-- config:end -->
@@ -392,15 +397,15 @@ Requires snacks.nvim and a terminal which fully supports the kitty graphics prot
 - [x] Cell folding
 - [x] Cell formatting via LSP (`:NotebookFormatCell`, `:NotebookFormatAll`, or `vim.lsp.buf.format()`)
 - [x] Health check (`:checkhealth ipynb`)
+- [x] Code lens (`textDocument/codeLens`) — server/project dependent (may require `shadow.location = "workspace"`)
+- [x] Call hierarchy (`callHierarchy/*`) — requires symbols in a project/module (may require `shadow.location = "workspace"`)
+- [x] Type hierarchy (`typeHierarchy/*`) — requires symbols in a project/module (may require `shadow.location = "workspace"`)
+- [x] Selection range (`textDocument/selectionRange`) — requires Neovim 0.12+
 
 🚧 **Not Tested (may or may not work):**
 
 - Semantic tokens (`textDocument/semanticTokens`)
-- Code lens (`textDocument/codeLens`)
 - Document links (`textDocument/documentLink`)
-- Call hierarchy (`callHierarchy/*`)
-- Type hierarchy (`typeHierarchy/*`)
-- Selection range (`textDocument/selectionRange`)
 
 🚫 **Not Supported:**
 
