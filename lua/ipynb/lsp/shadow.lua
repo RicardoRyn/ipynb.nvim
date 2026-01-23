@@ -87,8 +87,25 @@ function M.create_shadow(state)
   -- Get language from notebook metadata
   local lang, ext = get_language_info(state)
 
-  -- Create temp file for LSP to read (with appropriate extension)
-  local shadow_path = vim.fn.tempname() .. '_shadow' .. ext
+  -- Create shadow file path for LSP to read (with appropriate extension)
+  local shadow_path
+  local shadow_cfg = require('ipynb.config').get().shadow
+  if shadow_cfg and shadow_cfg.location == 'workspace' and state.facade_path then
+    local root = vim.fn.fnamemodify(state.facade_path, ':p:h')
+    local dir = vim.fs.joinpath(root, shadow_cfg.dir or '.ipynb.nvim')
+    vim.fn.mkdir(dir, 'p')
+    local filename = vim.fn.fnamemodify(state.facade_path, ':t')
+    local stem = filename:gsub('%.ipynb$', '')
+    shadow_path = vim.fs.joinpath(dir, stem .. '_shadow' .. ext)
+  else
+    shadow_path = vim.fn.tempname() .. '_shadow' .. ext
+  end
+  -- If a buffer with this name already exists (e.g., reopening notebook),
+  -- wipe it to avoid E95 "Buffer with this name already exists".
+  local existing = vim.fn.bufnr(shadow_path)
+  if existing ~= -1 and vim.api.nvim_buf_is_valid(existing) then
+    pcall(vim.api.nvim_buf_delete, existing, { force = true })
+  end
   vim.api.nvim_buf_set_name(shadow_buf, shadow_path)
 
   -- Generate and set shadow content

@@ -64,6 +64,10 @@ local M = {}
 ---@field enabled boolean Wrap vim.lsp.buf.format() to work with notebooks (default: true)
 ---@field trailing_blank_lines number Max trailing blank lines to keep after formatting (default: 0)
 
+---@class ShadowConfig
+---@field location "temp"|"workspace" Location for shadow file (default: "temp")
+---@field dir string Directory name used when location="workspace" (default: ".ipynb.nvim")
+
 ---@class HighlightConfig Highlight groups to link to (use existing groups or define your own)
 ---@field border string Cell border color (default: 'Comment')
 ---@field border_hover string Hover cell border - cursor on cell (default: 'Special')
@@ -189,6 +193,10 @@ M.defaults = {
 	format = {
 		enabled = true, -- Wrap vim.lsp.buf.format() to work with notebooks
 		trailing_blank_lines = 0, -- Max trailing blank lines to keep after formatting
+	},
+	shadow = {
+		location = "temp", -- "temp" (default) or "workspace"
+		dir = ".ipynb.nvim",
 	},
 }
 
