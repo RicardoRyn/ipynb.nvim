@@ -190,6 +190,29 @@ function M.install()
       vim.bo[args.buf].bufhidden = 'wipe' -- Wipe when hidden (after redirect)
     end,
   })
+
+  -- If an nb:// buffer is shown in a normal window (not a preview float),
+  -- immediately redirect to the real facade buffer to avoid getting stuck.
+  vim.api.nvim_create_autocmd('BufWinEnter', {
+    pattern = M.URI_SCHEME .. '://*',
+    callback = function(args)
+      local win = vim.api.nvim_get_current_win()
+      local cfg = vim.api.nvim_win_get_config(win)
+      if cfg.relative and cfg.relative ~= '' then
+        return -- keep previews in floating windows
+      end
+      local path = M.parse_facade_uri(args.match)
+      if not path then
+        return
+      end
+      local state_mod = require('ipynb.state')
+      local state = state_mod.get_by_path(path)
+      if state and state.facade_buf and vim.api.nvim_buf_is_valid(state.facade_buf) then
+        vim.api.nvim_set_current_buf(state.facade_buf)
+        pcall(vim.api.nvim_buf_delete, args.buf, { force = true })
+      end
+    end,
+  })
 end
 
 return M
