@@ -424,6 +424,7 @@ Execution: ~
     `:NotebookExecuteCell`         Execute current cell, stay
     `:NotebookExecuteAndNext`      Execute current cell, move to next
     `:NotebookExecuteAllBelow`     Execute all cells from current to end
+    `:NotebookExecuteAll`          Execute all code cells
 
 Kernel: ~
 

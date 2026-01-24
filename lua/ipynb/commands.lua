@@ -171,6 +171,10 @@ function M.setup_buffer(state)
     keymaps.execute_all_below(state)
   end, { desc = 'Execute all cells from current to end' })
 
+  vim.api.nvim_buf_create_user_command(buf, 'NotebookExecuteAll', function()
+    kernel.execute_all_below(state, 1)
+  end, { desc = 'Execute all code cells in the notebook' })
+
   -- Kernel commands
   vim.api.nvim_buf_create_user_command(buf, 'NotebookKernelStart', function(opts)
     local python_path = opts.args ~= '' and opts.args or nil

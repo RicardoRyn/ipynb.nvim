@@ -305,6 +305,7 @@ require("ipynb").setup({
 | `:NotebookExecuteCell` | Execute cell, stay | `execute_cell` | `<C-CR>` |
 | `:NotebookExecuteAndNext` | Execute cell, move next | `execute_and_next` | `<S-CR>` |
 | `:NotebookExecuteAllBelow` | Execute current and below | `execute_all_below` | (unmapped) |
+| `:NotebookExecuteAll` | Execute all code cells | | |
 | `:NotebookOutput` | Open output in float | `open_output` | `<leader>ko` |
 | `:NotebookClearOutput` | Clear cell output | `clear_output` | `<leader>kc` |
 | `:NotebookClearAllOutputs` | Clear all outputs | `clear_all_outputs` | `<leader>kC` |
