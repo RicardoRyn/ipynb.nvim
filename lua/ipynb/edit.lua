@@ -90,9 +90,10 @@ install_changetracking_wrapper()
 ---@param line_count number Number of lines
 local function update_edit_window_height(edit, line_count)
   if vim.api.nvim_win_is_valid(edit.win) then
-    vim.api.nvim_win_set_height(edit.win, math.max(line_count, 1))
     vim.api.nvim_win_call(edit.win, function()
-      vim.fn.winrestview({ topline = 1 })
+      local view = vim.fn.winsaveview()
+      vim.api.nvim_win_set_height(edit.win, math.max(line_count, 1))
+      vim.fn.winrestview(view)
     end)
   end
 end

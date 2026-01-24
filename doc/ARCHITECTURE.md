@@ -54,19 +54,19 @@ A modal Jupyter notebook editor for Neovim with partial LSP support.
 │  • Markdown cells show content    │    │  • Markdown cells = blank lines   │
 │  • Visual decorations/borders     │    │  • LSP attached here (any lang)   │
 │  • Treesitter language injection  │    │  • Same line count as facade      │
-│                                   │    │    (minus trailing blank)        │
+│                                   │    │    (minus trailing blank)         │
 └───────────────────────────────────┘    └───────────────────────────────────┘
           │                                          │
           │         ┌────────────────────────────────┘
           │         │
           ▼         ▼
-    ┌───────────────────────┐
-    │    LSP Proxy Layer    │
-    │  • Requests: facade → shadow buffer (position unchanged)
-    │  • Requests: edit buffer → shadow buffer (line-offset to match facade)
-    │  • Responses: shadow → facade buffer (position unchanged)
-    │  • Diagnostics: filter markdown cells from display
-    └───────────────────────┘
+    ┌────────────────────────────────────────────────────────────────────────┐
+    │    LSP Proxy Layer                                                     │
+    │  • Requests: facade → shadow buffer (position unchanged)               │
+    │  • Requests: edit buffer → shadow buffer (line-offset to match facade) │
+    │  • Responses: shadow → facade buffer (position unchanged)              │
+    │  • Diagnostics: filter markdown cells from display                     │
+    └────────────────────────────────────────────────────────────────────────┘
           │
           ├──────────────────────────────────┐
           ▼                                  ▼
