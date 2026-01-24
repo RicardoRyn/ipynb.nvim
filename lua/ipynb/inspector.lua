@@ -279,8 +279,18 @@ function M.show_cell_variables(state)
 				local info = results[ident]
 				if info.found then
 					local sections = info.sections or {}
+					-- Normalize vim.NIL (from JSON null) to nil to avoid userdata issues
+					for key, value in pairs(sections) do
+						if value == vim.NIL then
+							sections[key] = nil
+						end
+					end
 					local type_str = sections.type or "?"
-					local value_str = sections.string_form or "..."
+					local value_str = sections.string_form
+					if type(value_str) ~= "string" then
+						value_str = nil
+					end
+					value_str = value_str or "..."
 					-- Truncate long values (take first line only)
 					local first_line = value_str:match("^([^\n]*)") or value_str
 					if #first_line > 60 then
@@ -494,7 +504,7 @@ function M.show_inspect_float(name, sections, lang)
 				title_pos = "center",
 				footer = footer,
 				footer_pos = "center",
-				zindex = 41,
+				zindex = 42,
 			})
 		end
 
@@ -593,6 +603,7 @@ function M.show_variables_float(lines, cell_idx, var_data, lang)
 		title_pos = "center",
 		footer = footer,
 		footer_pos = "center",
+		zindex = 41,
 	})
 
 	vim.wo[win].wrap = true
@@ -726,7 +737,7 @@ function M.show_hover_silent(state)
 				border = "rounded",
 				title = title,
 				title_pos = "center",
-				zindex = 41,
+				zindex = 42,
 				focusable = false,
 			})
 		end)
