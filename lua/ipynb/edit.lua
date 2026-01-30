@@ -468,6 +468,10 @@ function M.setup_sync(state, buf)
       edit.insert_synced = false
       if had_changes then
         sync_facade()
+        -- Force undo break on facade so next insert session creates a new undo block
+        vim.api.nvim_buf_call(state.facade_buf, function()
+          vim.cmd('let &undolevels = &undolevels')
+        end)
       end
     end,
   })
@@ -500,6 +504,11 @@ function M.setup_sync(state, buf)
 
       -- Sync facade
       sync_facade()
+
+      -- Force undo break on facade so next change creates a new undo block
+      vim.api.nvim_buf_call(state.facade_buf, function()
+        vim.cmd('let &undolevels = &undolevels')
+      end)
     end,
   })
 end
@@ -769,6 +778,7 @@ local function global_undo_redo(state, cmd)
   cells_mod.place_markers(state)
 
   -- Refresh the active edit buffer directly from facade
+  -- Set skip_sync and delay resetting it until after deferred autocmds run
   state.skip_sync = true
   if state.edit_state and vim.api.nvim_buf_is_valid(state.edit_state.buf) then
     local target_cell_id = state.edit_state.cell_id
@@ -790,7 +800,10 @@ local function global_undo_redo(state, cmd)
       end
     end
   end
-  state.skip_sync = false
+  -- Delay resetting skip_sync until after any deferred TextChanged autocmds
+  vim.schedule(function()
+    state.skip_sync = false
+  end)
 
   -- Update shadow buffer
   local lsp_mod = require('ipynb.lsp')
