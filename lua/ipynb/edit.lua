@@ -789,6 +789,28 @@ local function global_undo_redo(state, cmd)
   cells_mod.sync_cells_from_facade(state)
   cells_mod.place_markers(state)
 
+  -- Correct cursor position if it landed on a cell border after undo/redo
+  -- Find the facade window and ensure cursor is inside cell content, not on marker
+  for _, win in ipairs(vim.api.nvim_list_wins()) do
+    if vim.api.nvim_win_get_buf(win) == state.facade_buf then
+      local cursor = vim.api.nvim_win_get_cursor(win)
+      local line = cursor[1] - 1  -- 0-indexed
+      local cell_idx = cells_mod.get_cell_at_line(state, line)
+      if cell_idx then
+        local content_start, content_end = cells_mod.get_content_range(state, cell_idx)
+        if content_start and content_end then
+          -- If cursor is outside content range (on marker), move it inside
+          if line < content_start then
+            pcall(vim.api.nvim_win_set_cursor, win, { content_start + 1, cursor[2] })
+          elseif line > content_end then
+            pcall(vim.api.nvim_win_set_cursor, win, { content_end + 1, cursor[2] })
+          end
+        end
+      end
+      break
+    end
+  end
+
   -- Refresh the active edit buffer directly from facade
   -- Set skip_sync and delay resetting it until after deferred autocmds run
   state.skip_sync = true
