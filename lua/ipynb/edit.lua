@@ -313,6 +313,10 @@ function M.open(state, mode)
   local relative_line = cursor_line - content_start + 1  -- 1-indexed for nvim_win_set_cursor
   local max_line = vim.api.nvim_buf_line_count(buf)
 
+  -- Track if cursor was on border (for adjusting 'o'/'O' behavior)
+  local was_before_content = relative_line < 1
+  local was_after_content = relative_line > max_line
+
   -- Clamp to valid range
   if relative_line < 1 then
     relative_line = 1
@@ -343,12 +347,20 @@ function M.open(state, mode)
     vim.cmd('normal! ^')
     vim.cmd('startinsert')
   elseif mode == 'o' then
-    -- open line below
-    vim.cmd('normal! o')
+    -- open line below (but if cursor was on top border, open above to insert at top)
+    if was_before_content then
+      vim.cmd('normal! O')
+    else
+      vim.cmd('normal! o')
+    end
     vim.cmd('startinsert')
   elseif mode == 'O' then
-    -- open line above
-    vim.cmd('normal! O')
+    -- open line above (but if cursor was on bottom border, open below to insert at bottom)
+    if was_after_content then
+      vim.cmd('normal! o')
+    else
+      vim.cmd('normal! O')
+    end
     vim.cmd('startinsert')
   end
   -- mode == nil: stay in normal mode at cursor position
